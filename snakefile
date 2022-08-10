@@ -48,8 +48,8 @@ rule kneaddata:
         'kneaddata: {wildcards.samples}\n'
     shell:
         'kneaddata '
-        '--input1 {input.read1} '
-        '--input2 {input.read2} '
+        '--input {input.read1} '
+        '--input {input.read2} '
         '-t {threads} '
         '--log-level INFO '
         '--log {log} '

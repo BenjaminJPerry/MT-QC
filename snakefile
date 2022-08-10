@@ -21,9 +21,9 @@ onstart:
     print(f"Env TMPDIR={os.environ.get('TMPDIR', '<n/a>')}")
 
 # Define samples from data directory using wildcards
-SAMPLES, = glob_wildcards('fastq/{samples}_L001_R1_001.fastq.gz')
+SAMPLES, = glob_wildcards('fastq/{samples}_R1_001.fastq.gz')
 
-print("Wildcards Found:")
+print("Found:")
 for WLDCRD in SAMPLES:
     print(WLDCRD)
 print("")
@@ -35,8 +35,8 @@ rule target:
 
 rule kneaddata:
     input:
-        read1='fastq/{samples}_L001_R1_001.fastq.gz',
-        read2='fastq/{samples}_L001_R2_001.fastq.gz',
+        read1='fastq/{samples}_R1_001.fastq.gz',
+        read2='fastq/{samples}_R2_001.fastq.gz',
         # ovineDB='ref/ARS_UI_Ramb_v2',
         # silvaDB='ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA'
     output:
@@ -47,7 +47,7 @@ rule kneaddata:
         'logs/{samples}.kneaddata.log'
     conda:
         'biobakery'
-    threads:64
+    threads:12
     message:
         'kneaddata: {wildcards.samples}\n'
     shell:

@@ -44,8 +44,6 @@ rule kneaddata:
     conda:
         'biobakery'
     threads:12
-    resources:
-        ''
     message:
         'kneaddata: {wildcards.samples}\n'
     shell:

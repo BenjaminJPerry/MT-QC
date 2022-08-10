@@ -45,7 +45,7 @@ rule kneaddata:
         'biobakery'
     threads:12
     resources:
-        tempdir=config['TMPDIR']
+        ''
     message:
         'kneaddata: {wildcards.samples}\n'
     shell:

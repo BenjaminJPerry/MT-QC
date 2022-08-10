@@ -23,9 +23,10 @@ onstart:
 # Define samples from data directory using wildcards
 SAMPLES, = glob_wildcards('fastq/{samples}_L001_R1_001.fastq.gz')
 
-print("Wildcards Found: \n")
+print("Wildcards Found:")
 for WLDCRD in SAMPLES:
     print(WLDCRD)
+print("")
 
 rule target:
     input:

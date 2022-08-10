@@ -22,19 +22,19 @@ onstart:
 
 # Define samples from data directory using wildcards
 SAMPLES, = glob_wildcards('fastq/{samples}_L001_R1_001.fastq.gz')
+print(SAMPLES)
 
 rule target:
     input:
         expand('1_kneaddata/{samples}/seq_kneaddata_paired_1.fastq', samples=SAMPLES),
         expand('1_kneaddata/{samples}/seq_kneaddata_paired_2.fastq', samples=SAMPLES)
 
-
 rule kneaddata:
     input:
         read1='fastq/{samples}_L001_R1_001.fastq.gz',
         read2='fastq/{samples}_L001_R2_001.fastq.gz',
-        ovineDB='ref/ARS_UI_Ramb_v2',
-        silvaDB='ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA'
+        # ovineDB='ref/ARS_UI_Ramb_v2',
+        # silvaDB='ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA'
     output:
         sampleDir=directory('1_kneaddata/{samples}'),
         clnRead1='1_kneaddata/{samples}/seq_kneaddata_paired_1.fastq',
@@ -53,8 +53,8 @@ rule kneaddata:
         '-t {threads} '
         '--log-level INFO '
         '--log {log} '
-        '-db {input.ovineDB} '
-        '-db {input.silvaDB} '
+        '-db ref/ARS_UI_Ramb_v2 '
+        '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
         '-o {output.sampleDir} '
 #
 # rule porechop:

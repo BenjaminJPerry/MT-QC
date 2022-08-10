@@ -56,7 +56,7 @@ rule kneaddata:
         '-t {threads} '
         '--log-level INFO '
         '--log {log} '
-        '--trimmomatic trimmomatic '
+        '--trimmomatic /home/perrybe/conda-envs/biobakery/share/trimmomatic '
         '--sequencer-source TruSeq3 '
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '

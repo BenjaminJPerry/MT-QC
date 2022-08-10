@@ -47,7 +47,7 @@ rule kneaddata:
         'logs/{samples}.kneaddata.log'
     conda:
         'biobakery'
-    threads:12
+    threads:64
     message:
         'kneaddata: {wildcards.samples}\n'
     shell:

@@ -30,8 +30,8 @@ print("")
 
 rule target:
     input:
-        expand('1_kneaddata/{samples}/seq_kneaddata_paired_1.fastq', samples=SAMPLES),
-        expand('1_kneaddata/{samples}/seq_kneaddata_paired_2.fastq', samples=SAMPLES)
+        expand('1_kneaddata/{samples}/{samples}_R1_001_kneaddata_paired_2.fastq', samples=SAMPLES),
+        expand('1_kneaddata/{samples}/{samples}_R2_001_kneaddata_paired_2.fastq', samples=SAMPLES)
 
 rule kneaddata:
     input:
@@ -41,8 +41,8 @@ rule kneaddata:
         # silvaDB='ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA'
     output:
         sampleDir=directory('1_kneaddata/{samples}'),
-        clnRead1='1_kneaddata/{samples}/seq_kneaddata_paired_1.fastq',
-        clnRead2='1_kneaddata/{samples}/seq_kneaddata_paired_2.fastq'
+        clnRead1='1_kneaddata/{samples}/{samples}_R1_001_kneaddata_paired_1.fastq',
+        clnRead2='1_kneaddata/{samples}/{samples}_R2_001_kneaddata_paired_2.fastq'
     log:
         'logs/{samples}.kneaddata.log'
     conda:

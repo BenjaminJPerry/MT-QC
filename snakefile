@@ -31,8 +31,8 @@ print("")
 
 rule target:
     input:
-        expand('2_humann3RumFunc/{samples}_kneaddata_genefamilies.tsv', samples=SAMPLES),
-        expand('2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv', samples=SAMPLES)
+        expand('2_humann3RumFunc/{samples}/{samples}_kneaddata_genefamilies.tsv', samples=SAMPLES),
+        expand('2_humann3Ovine/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv', samples=SAMPLES)
 
 rule kneaddata:
     input:

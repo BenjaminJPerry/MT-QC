@@ -92,7 +92,6 @@ rule human3RumFunc:
         '--verbose '
         '--log-level INFO '
         '--o-log {log} '
-        '--remove-stratified-output '
         '--remove-temp-output '
 
 rule human3Ovine:
@@ -122,6 +121,5 @@ rule human3Ovine:
         '--verbose '
         '--log-level INFO '
         '--o-log {log} '
-        '--remove-stratified-output '
         '--remove-temp-output '
 

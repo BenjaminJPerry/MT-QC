@@ -38,7 +38,7 @@ rule kneaddata:
     input:
         reads = 'fastq/{samples}.fastq.gz',
     output:
-        clnReads = temp('1_kneaddata/{samples}_kneaddata.fastq'),
+        clnReads = '1_kneaddata/{samples}_kneaddata.fastq',
         ovineReads = temp('1_kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq'),
         silvaReads = temp('1_kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
         trpReads = temp('1_kneaddata/{samples}_kneaddata.repeats.removed.fastq'),
@@ -92,31 +92,31 @@ rule human3RumFunc:
         '--o-log {log} '
         '--remove-temp-output '
 
-rule human3Ovine:
-    input:
-        ovineReads = '1_kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq',
-    output:
-        genes = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv',
-        pathways = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathabundance.tsv',
-        pathwaysCoverage = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathcoverage.tsv'
-    log:
-        'logs/{samples}.human3.Ovine.log'
-    conda:
-        'biobakery'
-    threads:12
-    message:
-        'humann3 profiling RumFunc: {wildcards.samples}\n'
-    shell:
-        'humann '
-        '--threads {threads} '
-        '--input {input.ovineReads} '
-        '--output 2_humann3Ovine/ '
-        '--bypass-nucleotide-search '
-        '--memory-use maximum '
-        '--input-format fastq '
-        '--search-mode uniref90 '
-        '--verbose '
-        '--log-level INFO '
-        '--o-log {log} '
-        '--remove-temp-output '
-
+# rule human3Ovine:
+#     input:
+#         ovineReads = '1_kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq',
+#     output:
+#         genes = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv',
+#         pathways = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathabundance.tsv',
+#         pathwaysCoverage = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathcoverage.tsv'
+#     log:
+#         'logs/{samples}.human3.Ovine.log'
+#     conda:
+#         'biobakery'
+#     threads:12
+#     message:
+#         'humann3 profiling RumFunc: {wildcards.samples}\n'
+#     shell:
+#         'humann '
+#         '--threads {threads} '
+#         '--input {input.ovineReads} '
+#         '--output 2_humann3Ovine/ '
+#         '--bypass-nucleotide-search '
+#         '--memory-use maximum '
+#         '--input-format fastq '
+#         '--search-mode uniref90 '
+#         '--verbose '
+#         '--log-level INFO '
+#         '--o-log {log} '
+#         '--remove-temp-output '
+#

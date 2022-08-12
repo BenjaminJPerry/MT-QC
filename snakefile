@@ -43,7 +43,7 @@ rule kneaddata:
         silvaReads = temp('1_kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
         trpReads = temp('1_kneaddata/{samples}_kneaddata.repeats.removed.fastq'),
         trimReads = temp('1_kneaddata/{samples}_kneaddata.trimmed.fastq'),
-        readStats = '1_kneaddata/{samples}.read.stats.txt}'
+        readStats = '1_kneaddata/{samples}.read.stats.txt'
     log:
         'logs/{samples}.kneaddata.log'
     conda:

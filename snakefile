@@ -38,10 +38,11 @@ rule kneaddata:
     input:
         reads = 'fastq/{samples}.fastq.gz',
     output:
-        clnReads = '1_kneaddata/{samples}_kneaddata.fastq',
-        ovineReads = temp('1_kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_clean.fastq'),
-        silvaReads = temp('1_kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_clean.fastq'),
         trimReads = temp('1_kneaddata/{samples}_kneaddata.trimmed.fastq'),
+        trfReads = temp('1_kneaddata/{samples}_kneaddata.repeats.removed.fastq'),
+        ovineReads = temp('1_kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq'),
+        silvaReads = temp('1_kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
+        clnReads= temp('1_kneaddata/{samples}_kneaddata.fastq'),
         readStats = '1_kneaddata/{samples}.read.stats.txt'
     log:
         'logs/{samples}.kneaddata.log'

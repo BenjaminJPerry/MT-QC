@@ -62,7 +62,7 @@ rule kneaddata:
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
         '-o 1_kneaddata && '
-        'seqkit stats -j 12 -a 1_kneaddata/{wildcards.samples}*.fastq > {output.readStats} '
+        'seqkit stats -j 12 -a 1_kneaddata/{wildcards.samples}*.fastq > {output.readStats}'
 
 rule human3RumFunc:
     input:

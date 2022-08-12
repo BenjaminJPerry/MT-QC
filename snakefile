@@ -60,7 +60,7 @@ rule kneaddata:
         '--sequencer-source TruSeq3 '
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
-        '--remove-intermediate-output '
+        #'--remove-intermediate-output ' TODO: Test this parameter before use
         '-o 1_kneaddata && '
         'seqkit stats -j 12 -a 1_kneaddata/{wildcards.samples}*.fastq > {output.readStats}'
 

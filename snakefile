@@ -88,7 +88,7 @@ rule human3RumFunc:
         '--memory-use maximum '
         '--input-format fastq '
         '--search-mode uniref90 '
-        '--protein-database ref/uniref'
+        '--protein-database ref/uniref '
         '--verbose '
         '--log-level INFO '
         '--o-log {log} '

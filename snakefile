@@ -21,8 +21,9 @@ onstart:
     print(f"Env TMPDIR={os.environ.get('TMPDIR', '<n/a>')}")
 
 # Define samples from data directory using wildcards
-SAMPLES, = glob_wildcards('fastq/{samples}_R1_001.fastq.gz')
+SAMPLES, = glob_wildcards('fastq/{samples}.fastq.gz')
 
+# WC Sanity Check :D
 print("Found:")
 for WLDCRD in SAMPLES:
     print(WLDCRD)
@@ -30,19 +31,20 @@ print("")
 
 rule target:
     input:
-        expand('1_kneaddata/{samples}/{samples}_R1_001_kneaddata_paired_2.fastq', samples=SAMPLES),
-        expand('1_kneaddata/{samples}/{samples}_R2_001_kneaddata_paired_2.fastq', samples=SAMPLES)
+        expand('2_humann3RumFunc/{samples}_kneaddata_genefamilies.tsv', samples=SAMPLES),
+        expand('2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv', samples=SAMPLES)
 
 rule kneaddata:
     input:
-        read1='fastq/{samples}_R1_001.fastq.gz',
-        read2='fastq/{samples}_R2_001.fastq.gz',
-        # ovineDB='ref/ARS_UI_Ramb_v2',
-        # silvaDB='ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA'
+        reads = 'fastq/{samples}.fastq.gz',
     output:
-        sampleDir=directory('1_kneaddata/{samples}'),
-        clnRead1='1_kneaddata/{samples}/{samples}_R1_001_kneaddata_paired_1.fastq',
-        clnRead2='1_kneaddata/{samples}/{samples}_R2_001_kneaddata_paired_2.fastq'
+        outDir = directory('1_kneaddata/{samples}'),
+        clnReads = temp('1_kneaddata/{samples}/{samples}_kneaddata.fastq'),
+        ovineReads = temp('1_kneaddata/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq'),
+        silvaReads = temp('1_kneaddata/{samples}/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
+        trpReads = temp('1_kneaddata/{samples}/{samples}_kneaddata.repeats.removed.fastq'),
+        trimReads = temp('1_kneaddata/{samples}/{samples}_kneaddata.trimmed.fastq'),
+        readStats = '1_kneaddata/{samples}.read.stats.txt}'
     log:
         'logs/{samples}.kneaddata.log'
     conda:
@@ -52,8 +54,7 @@ rule kneaddata:
         'kneaddata: {wildcards.samples}\n'
     shell:
         'kneaddata '
-        '--input {input.read1} '
-        '--input {input.read2} '
+        '--input {input.reads} '
         '-t {threads} '
         '--log-level INFO '
         '--log {log} '
@@ -61,67 +62,66 @@ rule kneaddata:
         '--sequencer-source TruSeq3 '
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
-        '-o {output.sampleDir} '
-#
-# rule porechop:
-#     input:
-#         'fastq/{samples}.fastq.gz'
-#     output:
-#         '01_chop/{samples}.chop.fastq.gz'
-#     log:
-#         'logs/{samples}/porechop.log'
-#     conda:
-#         'porechop'
-#     params:
-#         checks=config['porechop']['check_reads'],
-#         adpthresh=config['porechop']['adapter_threshold'],
-#         midthresh=config['porechop']['middle_threshold'],
-#         splitlen=config['porechop']['min_split_size']
-#     resources:
-#         tempdir=config['TMPDIR']
-#     threads:4
-#     message:
-#         'Chopping: {wildcards.samples}\n'
-#         'TMPDIR: {resources.tempdir}'
-#     shell:
-#         'porechop '
-#         '--threads {threads} '
-#         '--verbosity 1 '
-#         '--format fastq.gz '
-#         '--check_reads {params.checks} '
-#         '--adapter_threshold {params.adpthresh} '
-#         '--middle_threshold {params.midthresh} '
-#         '--min_split_read_size {params.splitlen} '
-#         '-i {input} '
-#         '-o {output} '
-#         '2>&1 | tee {log}'
-#
-# rule cutadapt:
-#     input:
-#         rules.porechop.output
-#     output:
-#         '02_cutadapt/{samples}.chop.primer.fastq.gz'
-#     threads:4
-#     log:
-#         'logs/{samples}/cutadapt.primers.log'
-#     conda:
-#         'cutadapt'
-#     params:
-#         fwdPrimer=config['cutadapt']['fwd'],
-#         revPrimer=config['cutadapt']['rev'],
-#     resources:
-#         tempdir=config['TMPDIR']
-#     message:
-#         'removing primers: {wildcards.samples}\n'
-#         'TMPDIR: {resources.tempdir}'
-#     shell:
-#         'cutadapt '
-#         '--discard-untrimmed '
-#         '--action=retain '
-#         '-j {threads} '
-#         '--error-rate 0.2 '
-#         '-g {params.fwdPrimer} '
-#         '-a {params.revPrimer} '
-#         '-o {output} '
-#         '{input} '
-#         '2>&1 | tee {log}'
+        '-o {output.outDir} && '
+        'seqkit stats -j 12 -a 1_kneaddata/{output.outDir}/*.fastq > {output.readStats} '
+
+rule human3RumFunc:
+    input:
+        clnReads = '1_kneaddata/{samples}/{samples}_kneaddata.fastq',
+    output:
+        rumFuncDir = directory('2_humann3RumFunc'),
+        genes = '2_humann3RumFunc/{samples}_kneaddata_genefamilies.tsv',
+        pathways = '2_humann3RumFunc/{samples}_kneaddata_pathabundance.tsv',
+        pathwaysCoverage = '2_humann3RumFunc/{samples}_kneaddata_pathcoverage.tsv'
+    log:
+        'logs/{samples}.human3.RumFunc.log'
+    conda:
+        'biobakery'
+    threads:12
+    message:
+        'humann3 profiling RumFunc: {wildcards.samples}\n'
+    shell:
+        'humann '
+        '--threads {threads} '
+        '--input {input.clnReads} '
+        '--output {output.rumFuncDir} '
+        '--bypass-nucleotide-search '
+        '--memory-use maximum '
+        '--input-format fastq '
+        '--search-mode uniref90 '
+        '--verbose '
+        '--log-level INFO '
+        '--o-log {log} '
+        '--remove-stratified-output '
+        '--remove-temp-output '
+
+rule human3Ovine:
+    input:
+        ovineReads = '1_kneaddata/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq',
+    output:
+        OvineDir = directory('2_humann3Ovine'),
+        genes = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv',
+        pathways = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathabundance.tsv',
+        pathwaysCoverage = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathcoverage.tsv'
+    log:
+        'logs/{samples}.human3.RumFunc.log'
+    conda:
+        'biobakery'
+    threads:12
+    message:
+        'humann3 profiling RumFunc: {wildcards.samples}\n'
+    shell:
+        'humann '
+        '--threads {threads} '
+        '--input {input.ovineReads} '
+        '--output {output.OvineDir} '
+        '--bypass-nucleotide-search '
+        '--memory-use maximum '
+        '--input-format fastq '
+        '--search-mode uniref90 '
+        '--verbose '
+        '--log-level INFO '
+        '--o-log {log} '
+        '--remove-stratified-output '
+        '--remove-temp-output '
+

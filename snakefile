@@ -33,12 +33,11 @@ rule target:
     input:
         expand('2_humann3RumFunc/{samples}_kneaddata_genefamilies.tsv', samples=SAMPLES),
         expand('2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv', samples=SAMPLES)
-#2_humann3RumFunc/NEG1-S12_kneaddata_genefamilies.tsv,2_humann3Ovine/NEG1-S12_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv
+
 rule kneaddata:
     input:
         reads = 'fastq/{samples}.fastq.gz',
     output:
-        #outDir = directory('1_kneaddata/{samples}'),
         clnReads = temp('1_kneaddata/{samples}_kneaddata.fastq'),
         ovineReads = temp('1_kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq'),
         silvaReads = temp('1_kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
@@ -69,7 +68,6 @@ rule human3RumFunc:
     input:
         clnReads = '1_kneaddata/{samples}_kneaddata.fastq',
     output:
-        #rumFuncDir = directory('2_humann3RumFunc/{samples}'),
         genes = '2_humann3RumFunc/{samples}_kneaddata_genefamilies.tsv',
         pathways = '2_humann3RumFunc/{samples}_kneaddata_pathabundance.tsv',
         pathwaysCoverage = '2_humann3RumFunc/{samples}_kneaddata_pathcoverage.tsv'
@@ -98,7 +96,6 @@ rule human3Ovine:
     input:
         ovineReads = '1_kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq',
     output:
-        #ovineDir = directory('2_humann3Ovine/{samples}'),
         genes = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv',
         pathways = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathabundance.tsv',
         pathwaysCoverage = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathcoverage.tsv'

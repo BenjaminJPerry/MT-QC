@@ -33,8 +33,7 @@ rule target:
     input:
         expand('2_humann3RumFunc/{samples}_kneaddata_genefamilies.tsv', samples=SAMPLES),
         #expand('2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv', samples=SAMPLES)
-ExtnCtrl-NS-S38
-2_humann3RumFunc/ExtnCtrl-NS-S38_kneaddata_genefamilies.tsv
+
 rule kneaddata:
     input:
         reads = 'fastq/{samples}.fastq.gz',

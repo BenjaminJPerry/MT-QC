@@ -103,7 +103,7 @@ rule human3Ovine:
         pathways = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathabundance.tsv',
         pathwaysCoverage = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathcoverage.tsv'
     log:
-        'logs/{samples}.human3.RumFunc.log'
+        'logs/{samples}.human3.Ovine.log'
     conda:
         'biobakery'
     threads:12

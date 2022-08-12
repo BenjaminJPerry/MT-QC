@@ -1,7 +1,7 @@
 #!/bin/bash
 ### Wrapper script for launching snakemake workflows ###
 clear
-echo "Launching snakeworkflow..."
+echo "Launching snakemake workflow..."
 
 sleep 10
 echo "Beginning executing on: $(date)"
@@ -12,7 +12,7 @@ fi
 
 conda activate snakemake
 
-snakemake --latency-wait 900 --rerun-incomplete --cluster "sbatch -o ./slurm/%j.log -A perrybe -t 08:00:00 -p inv-iranui-fast,inv-iranui --cpus-per-task {threads} -v" --jobs 6 --local-cores 4 --use-conda --keep-going --use-singularity --restart-times 5 --printshellcmds --reason -R $(snakemake --list-params-changes)
+snakemake --latency-wait 900 --rerun-incomplete --cluster "sbatch -o ./slurm/%j.log -A perrybe -t 08:00:00 -p inv-iranui-fast,inv-iranui --cpus-per-task {threads} -v" --jobs 16 --local-cores 4 --use-conda --keep-going --use-singularity --restart-times 5 --printshellcmds --reason -R $(snakemake --list-params-changes)
 
 snakemake --report snakemakeReport.html
 
@@ -20,4 +20,4 @@ snakemake --rulegraph | dot -T svg > rulegraph.svg
 
 conda deactivate
 
-echo "snakemake run completed: $(date)"
+echo "Snakemake run completed: $(date)"

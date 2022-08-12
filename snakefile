@@ -31,19 +31,19 @@ print("")
 
 rule target:
     input:
-        expand('2_humann3RumFunc/{samples}/{samples}_kneaddata_genefamilies.tsv', samples=SAMPLES),
-        expand('2_humann3Ovine/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv', samples=SAMPLES)
-
+        expand('2_humann3RumFunc/{samples}_kneaddata_genefamilies.tsv', samples=SAMPLES),
+        expand('2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv', samples=SAMPLES)
+#2_humann3RumFunc/NEG1-S12_kneaddata_genefamilies.tsv,2_humann3Ovine/NEG1-S12_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv
 rule kneaddata:
     input:
         reads = 'fastq/{samples}.fastq.gz',
     output:
-        outDir = directory('1_kneaddata/{samples}'),
-        clnReads = temp('1_kneaddata/{samples}/{samples}_kneaddata.fastq'),
-        ovineReads = temp('1_kneaddata/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq'),
-        silvaReads = temp('1_kneaddata/{samples}/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
-        trpReads = temp('1_kneaddata/{samples}/{samples}_kneaddata.repeats.removed.fastq'),
-        trimReads = temp('1_kneaddata/{samples}/{samples}_kneaddata.trimmed.fastq'),
+        #outDir = directory('1_kneaddata/{samples}'),
+        clnReads = temp('1_kneaddata/{samples}_kneaddata.fastq'),
+        ovineReads = temp('1_kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq'),
+        silvaReads = temp('1_kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
+        trpReads = temp('1_kneaddata/{samples}_kneaddata.repeats.removed.fastq'),
+        trimReads = temp('1_kneaddata/{samples}_kneaddata.trimmed.fastq'),
         readStats = '1_kneaddata/{samples}.read.stats.txt}'
     log:
         'logs/{samples}.kneaddata.log'
@@ -62,17 +62,17 @@ rule kneaddata:
         '--sequencer-source TruSeq3 '
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
-        '-o {output.outDir} && '
-        'seqkit stats -j 12 -a 1_kneaddata/{output.outDir}/*.fastq > {output.readStats} '
+        '-o 1_kneaddata && '
+        'seqkit stats -j 12 -a 1_kneaddata/{wildcards.samples}*.fastq > {output.readStats} '
 
 rule human3RumFunc:
     input:
-        clnReads = '1_kneaddata/{samples}/{samples}_kneaddata.fastq',
+        clnReads = '1_kneaddata/{samples}_kneaddata.fastq',
     output:
-        rumFuncDir = directory('2_humann3RumFunc/{samples}'),
-        genes = '2_humann3RumFunc/{samples}/{samples}_kneaddata_genefamilies.tsv',
-        pathways = '2_humann3RumFunc/{samples}/{samples}_kneaddata_pathabundance.tsv',
-        pathwaysCoverage = '2_humann3RumFunc/{samples}/{samples}_kneaddata_pathcoverage.tsv'
+        #rumFuncDir = directory('2_humann3RumFunc/{samples}'),
+        genes = '2_humann3RumFunc/{samples}_kneaddata_genefamilies.tsv',
+        pathways = '2_humann3RumFunc/{samples}_kneaddata_pathabundance.tsv',
+        pathwaysCoverage = '2_humann3RumFunc/{samples}_kneaddata_pathcoverage.tsv'
     log:
         'logs/{samples}.human3.RumFunc.log'
     conda:
@@ -84,7 +84,7 @@ rule human3RumFunc:
         'humann '
         '--threads {threads} '
         '--input {input.clnReads} '
-        '--output {output.rumFuncDir} '
+        '--output 2_humann3RumFunc '
         '--bypass-nucleotide-search '
         '--memory-use maximum '
         '--input-format fastq '
@@ -96,12 +96,12 @@ rule human3RumFunc:
 
 rule human3Ovine:
     input:
-        ovineReads = '1_kneaddata/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq',
+        ovineReads = '1_kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq',
     output:
-        OvineDir = directory('2_humann3Ovine/{samples}'),
-        genes = '2_humann3Ovine/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv',
-        pathways = '2_humann3Ovine/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathabundance.tsv',
-        pathwaysCoverage = '2_humann3Ovine/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathcoverage.tsv'
+        #ovineDir = directory('2_humann3Ovine/{samples}'),
+        genes = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv',
+        pathways = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathabundance.tsv',
+        pathwaysCoverage = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathcoverage.tsv'
     log:
         'logs/{samples}.human3.Ovine.log'
     conda:
@@ -113,7 +113,7 @@ rule human3Ovine:
         'humann '
         '--threads {threads} '
         '--input {input.ovineReads} '
-        '--output {output.OvineDir} '
+        '--output 2_humann3Ovine/ '
         '--bypass-nucleotide-search '
         '--memory-use maximum '
         '--input-format fastq '

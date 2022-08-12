@@ -69,10 +69,10 @@ rule human3RumFunc:
     input:
         clnReads = '1_kneaddata/{samples}/{samples}_kneaddata.fastq',
     output:
-        rumFuncDir = directory('2_humann3RumFunc'),
-        genes = '2_humann3RumFunc/{samples}_kneaddata_genefamilies.tsv',
-        pathways = '2_humann3RumFunc/{samples}_kneaddata_pathabundance.tsv',
-        pathwaysCoverage = '2_humann3RumFunc/{samples}_kneaddata_pathcoverage.tsv'
+        rumFuncDir = directory('2_humann3RumFunc/{samples}'),
+        genes = '2_humann3RumFunc/{samples}/{samples}_kneaddata_genefamilies.tsv',
+        pathways = '2_humann3RumFunc/{samples}/{samples}_kneaddata_pathabundance.tsv',
+        pathwaysCoverage = '2_humann3RumFunc/{samples}/{samples}_kneaddata_pathcoverage.tsv'
     log:
         'logs/{samples}.human3.RumFunc.log'
     conda:
@@ -98,10 +98,10 @@ rule human3Ovine:
     input:
         ovineReads = '1_kneaddata/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq',
     output:
-        OvineDir = directory('2_humann3Ovine'),
-        genes = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv',
-        pathways = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathabundance.tsv',
-        pathwaysCoverage = '2_humann3Ovine/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathcoverage.tsv'
+        OvineDir = directory('2_humann3Ovine/{samples}'),
+        genes = '2_humann3Ovine/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_genefamilies.tsv',
+        pathways = '2_humann3Ovine/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathabundance.tsv',
+        pathwaysCoverage = '2_humann3Ovine/{samples}/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam_pathcoverage.tsv'
     log:
         'logs/{samples}.human3.Ovine.log'
     conda:

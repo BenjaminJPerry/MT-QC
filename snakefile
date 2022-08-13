@@ -84,7 +84,7 @@ rule human3RumFunc:
         '--threads {threads} '
         '--input {input.clnReads} '
         '--output 2_humann3RumFunc '
-        '--nucleotide-database ref/chocophlan'
+        '--nucleotide-database ref/chocophlan '
         #'--bypass-nucleotide-search '
         '--memory-use maximum '
         '--input-format fastq '

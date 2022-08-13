@@ -48,7 +48,7 @@ rule kneaddata:
         'logs/{samples}.kneaddata.log'
     conda:
         'biobakery'
-    threads:12
+    threads:32
     message:
         'kneaddata: {wildcards.samples}\n'
     shell:
@@ -76,7 +76,7 @@ rule human3RumFunc:
         'logs/{samples}.human3.RumFunc.log'
     conda:
         'biobakery'
-    threads:12
+    threads:32
     message:
         'humann3 profiling RumFunc: {wildcards.samples}\n'
     shell:

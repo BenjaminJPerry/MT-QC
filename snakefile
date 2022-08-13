@@ -84,7 +84,7 @@ rule human3RumFunc:
         '--threads {threads} '
         '--input {input.clnReads} '
         '--output 2_humann3RumFunc '
-        '--bypass-nucleotide-search '
+        #'--bypass-nucleotide-search '
         '--memory-use maximum '
         '--input-format fastq '
         '--search-mode uniref90 '
